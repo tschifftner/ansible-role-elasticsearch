@@ -1,7 +1,7 @@
 ---
 - name: 'Install elasticsearch apt key'
   apt_key:
-    url: "elasticsearch_aptkey_url"
+    url: "{{ elasticsearch_aptkey_url }}"
     state: present
 
 - name: 'Add elasticsearch repository'
