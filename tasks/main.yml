@@ -14,8 +14,9 @@
 
 - name: 'Install elasticsearch'
   apt: name=elasticsearch state=present
+  notify: start elasticsearch
 
-- name: Configure elasticsearch
+- name: 'Configure elasticsearch'
   lineinfile:
     dest: "/etc/elasticsearch/elasticsearch.yml"
     regexp: "{{ item.regexp }}"
@@ -24,6 +25,17 @@
   with_items: elasticsearch_config
   notify: restart elasticsearch
 
-- name: 'Start elasticsearch'
-  service: name=elasticsearch state=started enabled=yes
+- name: 'Set elasticsearch defaults'
+  lineinfile:
+    dest: "/etc/default/elasticsearch"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: elasticsearch_defaults
+  notify: restart elasticsearch
 
+- name: 'Verify elasticsearch service'
+  service:
+    name: 'elasticsearch'
+    state: started
+    enabled: yes
