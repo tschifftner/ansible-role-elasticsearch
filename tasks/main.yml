@@ -1,0 +1,29 @@
+---
+- name: 'Install elasticsearch apt key'
+  apt_key:
+    url: "elasticsearch_aptkey_url"
+    state: present
+
+- name: 'Add elasticsearch repository'
+  apt_repository:
+    repo: "{{ elasticsearch_apt_repository }}"
+    state: present
+
+- name: 'Update cache'
+  apt: update_cache=yes cache_valid_time=86400
+
+- name: 'Install elasticsearch'
+  apt: name=elasticsearch state=present
+
+- name: Configure elasticsearch
+  lineinfile:
+    dest: "/etc/elasticsearch/elasticsearch.yml"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items: elasticsearch_config
+  notify: restart elasticsearch
+
+- name: 'Start elasticsearch'
+  service: name=elasticsearch state=started enabled=yes
+
