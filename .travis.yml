@@ -44,8 +44,7 @@ script:
   - sudo service elasticsearch status | grep "running"
   # Make sure elasticsearch is installed.
   - >
-    sleep 15s
-    curl 127.0.0.1:9200
+    sleep 15s && curl 127.0.0.1:9200
     && (echo 'ElasticSearch is installed' && exit 0)
     || (echo 'ElasticSearch is not installed' && exit 1)
 
