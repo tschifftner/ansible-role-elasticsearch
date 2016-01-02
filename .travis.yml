@@ -41,14 +41,14 @@ script:
   # ansible-lint checks for best practice
   - ansible-lint tests/$SITE
 
-  - sudo service elasticsearch status
+  - sudo service elasticsearch status | grep "running"
   # Make sure elasticsearch is installed.
   - >
+    sleep 15s
     curl 127.0.0.1:9200
     && (echo 'ElasticSearch is installed' && exit 0)
     || (echo 'ElasticSearch is not installed' && exit 1)
 
-  - sudo service elasticsearch status
 after_failure:
   - curl 127.0.0.1:9200
   - curl -I 127.0.0.1:9200
