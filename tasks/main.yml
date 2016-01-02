@@ -13,8 +13,9 @@
   apt: update_cache=yes cache_valid_time=86400
 
 - name: 'Install elasticsearch'
-  apt: name=elasticsearch state=present
-  notify: start elasticsearch
+  apt:
+    name: 'elasticsearch'
+    state: present
 
 - name: 'Configure elasticsearch'
   lineinfile:
