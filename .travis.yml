@@ -2,6 +2,7 @@
 language: python
 python: "2.7"
 sudo: required
+dist: trusty
 
 env:
   - SITE=test.yml
@@ -42,7 +43,7 @@ script:
 
   # Make sure elasticsearch is installed.
   - >
-    curl -X GET localhost:9200
+    curl 127.0.0.1:9200
     && (echo 'ElasticSearch is installed' && exit 0)
     || (echo 'ElasticSearch is not installed' && exit 1)
 
