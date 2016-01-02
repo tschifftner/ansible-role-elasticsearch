@@ -48,10 +48,13 @@ script:
     || (echo 'ElasticSearch is not installed' && exit 1)
 
 after_failure:
-    - sudo netstat -atnlp
-    - sudo ps aux | grep java
-    - curl 127.0.0.1:9200
-    - ansible -i 127.0.0.1, -m setup all -c local
+  - sudo service elasticsearch status
+  - sudo service elasticsearch start
+  - sudo service elasticsearch status
+  - sudo netstat -atnlp
+  - sudo ps aux | grep java
+  - curl 127.0.0.1:9200
+  - ansible -i 127.0.0.1, -m setup all -c local
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
