@@ -6,6 +6,7 @@ elasticsearch_apt_repository: "deb http://packages.elastic.co/elasticsearch/2.x/
 elasticsearch_config:
 #  - { regexp: '^script\.disable_dynamic', line: 'script.disable_dynamic: true' }
   - { regexp: 'network\.host', line: 'network.host: localhost' }
+  - { regexp: 'http\.port', line: 'http.port: 9200' }
 
 # settings for /etc/default/elasticsearch
 elasticsearch_defaults:
