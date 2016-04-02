@@ -23,7 +23,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
-  with_items: elasticsearch_config
+  with_items: '{{ elasticsearch_config }}'
   notify: restart elasticsearch
 
 - name: 'Set elasticsearch defaults'
@@ -32,7 +32,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
-  with_items: elasticsearch_defaults
+  with_items: '{{ elasticsearch_defaults }}'
   notify: restart elasticsearch
 
 - name: 'Verify elasticsearch service'
