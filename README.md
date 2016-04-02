@@ -6,7 +6,7 @@ Installs ElasticSearch 2.x from source on Debian/Ubuntu linux servers.
 
 ## Requirements
 
-ansible 1.8+
+ansible 1.7+
 
 ## Role Variables
 
@@ -35,6 +35,17 @@ $ ansible-galaxy install tschifftner.java
     - hosts: server
       roles:
         - { role: tschifftner.elasticsearch }
+
+## Supported OS
+
+Ansible          | Debian Jessie    | Ubuntu 14.04    | Ubuntu 12.04
+:--------------: | :--------------: | :-------------: | :-------------: 
+1.7              | Yes              | Yes             | Yes
+1.8              | Yes              | Yes             | Yes
+1.9              | Yes              | Yes             | Yes
+2.0.1*           | Yes              | Yes             | Yes
+
+*) 2.0.0.0, 2.0.0.1, 2.0.0.2 are not supported!
 
 ## License
 
