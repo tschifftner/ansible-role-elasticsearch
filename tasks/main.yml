@@ -40,3 +40,8 @@
     name: 'elasticsearch'
     state: started
     enabled: yes
+
+- name: 'Wait for elasticsearch to be started'
+  wait_for:
+    port: '{{ elasticsearch_port }}'
+    delay: 10
