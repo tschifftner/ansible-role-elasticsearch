@@ -28,7 +28,7 @@ script:
   - ${PWD}/tests/test.sh
 
   # Make sure elasticsearch service is running
-  - ${DOCKER} service elasticsearch status | grep "running"
+  - ${DOCKER} systemctl --no-pager status elasticsearch | grep "running"
 
   # Make sure elasticsearch is installed
   - >
