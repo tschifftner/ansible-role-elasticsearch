@@ -13,11 +13,33 @@ None
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
 ```
-elasticsearch_aptkey_url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
-elasticsearch_apt_repository: "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+elasticsearch_main_version: 6
+
+```
+
+Configuration:
+
+```
+elasticsearch_host: 'localhost'
+elasticsearch_port: 9200
+
+# settings for /etc/elasticsearch/elasticsearch.yml
 elasticsearch_config:
-  - { regexp: '^script\.disable_dynamic', line: 'script.disable_dynamic: true' }
-  - { regexp: 'network\.host', line: 'network.host: localhost' }
+#  - { regexp: '^script\.disable_dynamic', line: 'script.disable_dynamic: true' }
+  - { regexp: 'network\.host', line: 'network.host: {{ elasticsearch_host }}' }
+  - { regexp: 'http\.port', line: 'http.port: {{ elasticsearch_port }}' }
+
+# settings for /etc/default/elasticsearch
+elasticsearch_defaults:
+  - { regexp: '^ES_HOME=', line: 'ES_HOME=/usr/share/elasticsearch' }
+  - { regexp: '^CONF_DIR=', line: 'CONF_DIR=/etc/elasticsearch' }
+  - { regexp: '^DATA_DIR=', line: 'DATA_DIR=/var/lib/elasticsearch' }
+  - { regexp: '^LOG_DIR=', line: 'LOG_DIR=/var/log/elasticsearch' }
+  - { regexp: '^PID_DIR=', line: 'PID_DIR=/var/run/elasticsearch' }
+  - { regexp: '^ES_RESTART_ON_UPGRADE=', line: 'ES_RESTART_ON_UPGRADE=true' }
+  - { regexp: '^ES_USER=', line: 'ES_USER=elasticsearch' }
+  - { regexp: '^ES_GROUP=', line: 'ES_GROUP=elasticsearch' }
+  - { regexp: '^ES_STARTUP_SLEEP_TIME=', line: 'ES_STARTUP_SLEEP_TIME=5' }
 ```
 
 ## Dependencies
