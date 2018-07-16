@@ -1,8 +1,8 @@
-# Ansible Role: Install ElasticSearch 2.x
+# Ansible Role: Install ElasticSearch 6.x
 
 [![Build Status](https://travis-ci.org/tschifftner/ansible-role-elasticsearch.svg?branch=master)](https://travis-ci.org/tschifftner/ansible-role-elasticsearch)
 
-Installs ElasticSearch 2.x from source on Debian/Ubuntu linux servers.
+Installs ElasticSearch 6.x from source on Debian/Ubuntu linux servers.
 
 ## Requirements
 
