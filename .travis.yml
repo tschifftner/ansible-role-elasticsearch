@@ -30,9 +30,6 @@ script:
   # Make sure elasticsearch service is running
   - ${DOCKER} service elasticsearch status | grep "running"
 
-  # Wait for elasticsearch to be fully started
-  - sleep 15s
-
   # Make sure elasticsearch is installed
   - >
     ${DOCKER} curl 127.0.0.1:9200 | grep 'cluster_uuid'
