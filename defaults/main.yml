@@ -1,6 +1,8 @@
 ---
+elasticsearch_main_version: 6
+
 elasticsearch_aptkey_url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
-elasticsearch_apt_repository: "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+elasticsearch_apt_repository: "deb https://artifacts.elastic.co/packages/{{ elasticsearch_main_version }}.x/apt stable main"
 
 elasticsearch_host: 'localhost'
 elasticsearch_port: 9200

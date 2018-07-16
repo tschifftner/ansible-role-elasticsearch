@@ -1,4 +1,9 @@
 ---
+
+- name: 'Install required packages'
+  apt:
+    pkg: apt-transport-https
+
 - name: 'Install elasticsearch apt key'
   apt_key:
     url: "{{ elasticsearch_aptkey_url }}"
@@ -9,8 +14,10 @@
     repo: "{{ elasticsearch_apt_repository }}"
     state: present
 
-- name: 'Update cache'
-  apt: update_cache=yes cache_valid_time=86400
+- name: 'Update cache and install required packages'
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
 
 - name: 'Install elasticsearch'
   apt:
@@ -44,4 +51,5 @@
 - name: 'Wait for elasticsearch to be started'
   wait_for:
     port: '{{ elasticsearch_port }}'
-    delay: 10
+    delay: 3
+    timeout: 300
