@@ -1,70 +1,50 @@
 ---
-sudo: required
-dist: trusty
-
-language: python
-python: "2.7"
+services: docker
 
 env:
-  - SITE=test.yml ANSIBLE_VERSION=latest
-  - SITE=test.yml ANSIBLE_VERSION=2.1.0.0
+#  - distro: centos7
+#  - distro: centos6
+#  - distro: fedora27
+#  - distro: ubuntu1604
+#  - distro: ubuntu1404
+#  - distro: ubuntu1204
 
-branches:
-  only:
-    - master
-
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y curl
-
-install:
-  # Install Ansible.
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
-
-  # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
-
-  # Install ansible-lint
-  - pip install ansible-lint
-
-  # Install requirements
-  - ansible-galaxy install tschifftner.java
+  - distro: debian9
+  - distro: debian8
+  - distro: ubuntu1804
+  - distro: ubuntu1604
 
 script:
-  # Check the role/playbook's syntax.
-  - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+  - export DOCKER="docker exec --tty ${container_id} env TERM=xterm"
 
-  # Run the role/playbook with ansible-playbook.
-  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/tschifftner/4078cf2a8429d967d5e100649ff2caa9/raw/
+  - chmod +x ${PWD}/tests/test.sh
 
-  # Run the role/playbook again, checking to make sure it's idempotent.
-  - >
-    ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # ansible-lint checks for best practice
-  - ansible-lint tests/$SITE
+  # Run tests.
+  - ${PWD}/tests/test.sh
 
   # Make sure elasticsearch service is running
-  - sudo service elasticsearch status | grep "running"
+  - ${DOCKER} service elasticsearch status | grep "running"
 
   # Make sure elasticsearch is installed (requires some time to start!).
   - >
-    sleep 15s && curl 127.0.0.1:9200
+    ${DOCKER} sleep 15s && curl 127.0.0.1:9200
     && (echo 'ElasticSearch is installed' && exit 0)
     || (echo 'ElasticSearch is not installed' && exit 1)
 
 after_failure:
-  - curl 127.0.0.1:9200
-  - sudo service elasticsearch status
-  - sudo service elasticsearch start
-  - sudo service elasticsearch status
-  - sudo netstat -atnlp
-  - sudo ps aux | grep java
-  - curl 127.0.0.1:9200
-  - ansible -i 127.0.0.1, -m setup all -c local
+  - ls -la /var/www
+  - ${DOCKER} curl 127.0.0.1:9200
+  - ${DOCKER} service elasticsearch status
+  - ${DOCKER} service elasticsearch start
+  - ${DOCKER} service elasticsearch status
+  - ${DOCKER} netstat -atnlp
+  - ${DOCKER} ps aux | grep java
+  - ${DOCKER} curl 127.0.0.1:9200
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
