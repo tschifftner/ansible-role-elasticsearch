@@ -13,6 +13,7 @@
   apt_repository:
     repo: "{{ elasticsearch_apt_repository }}"
     state: present
+    filename: elasticsearch
 
 - name: 'Update cache and install required packages'
   apt:
